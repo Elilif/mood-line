@@ -792,6 +792,11 @@ Unlike the original, it also adds keyboard macro recording status. "
                                                'mood-line-major-mode)))))
     (concat (string-trim misc-info) "  ")))
 
+
+(defun mood-line-segment-input-indicator ()
+  (when (featurep 'rime)
+	(concat (rime-lighter) " ")))
+
 ;; ---------------------------------- ;;
 ;; Process segment
 ;; ---------------------------------- ;;
@@ -867,9 +872,10 @@ Unlike the original, it also adds keyboard macro recording status. "
                      '((:eval (mood-line-segment-indentation))
                        (:eval (mood-line-segment-eol))
                        (:eval (mood-line-segment-encoding))
+					   (:eval (mood-line-segment-input-indicator))
                        (:eval (mood-line-segment-vc))
                        (:eval (mood-line-segment-major-mode))
-                       (:eval (mood-line-segment-misc-info))
+					   (:eval (mood-line-segment-misc-info))
                        (:eval (mood-line-segment-checker))
                        (:eval (mood-line-segment-process))
                        " ")))))))
