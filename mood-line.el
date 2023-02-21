@@ -717,6 +717,19 @@ Checkers checked, in order: `flycheck', `flymake'."
           (propertize " %p%%  "
                       'face 'mood-line-unimportant)))
 
+(defun mood-line-segment-position ()
+  "Display the current cursor position in the mode-line,
+
+with region size if applicable."
+  (let ((region-size (when (use-region-p)
+                       (propertize (format " (%sL:%sC)"
+                                           (count-lines (region-beginning)
+                                                        (region-end))
+                                           (- (region-end) (region-beginning)))
+                                   'face 'mood-line-unimportant)))
+        (position (propertize " %p%% " 'face 'mood-line-unimportant)))
+    (list "%l:%c" position region-size)))
+
 ;; ---------------------------------- ;;
 ;; EOL segment
 ;; ---------------------------------- ;;
@@ -838,7 +851,7 @@ Checkers checked, in order: `flycheck', `flymake'."
                        (:eval (mood-line-segment-buffer-name))
                        (:eval (mood-line-segment-anzu))
                        (:eval (mood-line-segment-multiple-cursors))
-                       (:eval (mood-line-segment-cursor-position))))
+                       (:eval (mood-line-segment-position))))
 
                     ;; Right
                     (format-mode-line
