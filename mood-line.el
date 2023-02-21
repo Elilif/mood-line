@@ -775,13 +775,22 @@ with region size if applicable."
 ;; Misc. info segment
 ;; ---------------------------------- ;;
 
+;; (defun mood-line-segment-misc-info ()
+;;   "Display the current value of `mode-line-misc-info'."
+;;   (let ((misc-info (format-mode-line mode-line-misc-info)))
+;;     (unless (string-blank-p misc-info)
+;;       (concat (propertize (string-trim misc-info)
+;;                           'face 'mood-line-unimportant)
+;;               "  "))))
+
 (defun mood-line-segment-misc-info ()
-  "Display the current value of `mode-line-misc-info'."
-  (let ((misc-info (format-mode-line mode-line-misc-info)))
-    (unless (string-blank-p misc-info)
-      (concat (propertize (string-trim misc-info)
-                          'face 'mood-line-unimportant)
-              "  "))))
+  "Displays the current value of `mode-line-misc-info' in the mode-line.
+Unlike the original, it also adds keyboard macro recording status. "
+  (let ((misc-info (concat (format-mode-line mode-line-misc-info 'mood-line-unimportant)
+                           (when defining-kbd-macro
+                             (format-mode-line mode-line-defining-kbd-macro
+                                               'mood-line-major-mode)))))
+    (concat (string-trim misc-info) "  ")))
 
 ;; ---------------------------------- ;;
 ;; Process segment
