@@ -448,7 +448,7 @@ Modal modes checked, in order: `evil-mode', `meow-mode', `god-mode'."
             (cond
              ((memq state '(edited added))
               (format #("%s %s  "
-                        0 2 (face mood-line-status-info))
+						0 5 (face mood-line-status-neutral))
                       (mood-line--get-glyph :vc-added)
                       branch))
              ((eq state 'needs-merge)
@@ -701,8 +701,8 @@ Checkers checked, in order: `flycheck', `flymake'."
 
 (defun mood-line-segment-buffer-name ()
   "Display the name of the current buffer."
-  (propertize "%b  "
-              'face 'mood-line-buffer-name))
+  (propertize "%b "
+			  'face 'mood-line-buffer-name))
 
 ;; ---------------------------------- ;;
 ;; Cursor position segment
@@ -728,7 +728,9 @@ with region size if applicable."
                                            (- (region-end) (region-beginning)))
                                    'face 'mood-line-unimportant)))
         (position (propertize " %p%% " 'face 'mood-line-unimportant)))
-    (list "%l:%c" position region-size)))
+    (if (eq major-mode 'pdf-view-mode)
+		mode-line-position
+	  (list "%l:%c" position region-size))))
 
 ;; ---------------------------------- ;;
 ;; EOL segment
@@ -786,11 +788,16 @@ with region size if applicable."
 (defun mood-line-segment-misc-info ()
   "Displays the current value of `mode-line-misc-info' in the mode-line.
 Unlike the original, it also adds keyboard macro recording status. "
-  (let ((misc-info (concat (format-mode-line mode-line-misc-info 'mood-line-unimportant)
-                           (when defining-kbd-macro
-                             (format-mode-line mode-line-defining-kbd-macro
-                                               'mood-line-major-mode)))))
-    (concat (string-trim misc-info) "  ")))
+  (let ((misc-info (concat
+					(when (and (featurep 'markmacro)
+							   markmacro-overlays)
+					  (format-mode-line (format "ov:%s" (length markmacro-overlays))
+										'mood-line-unimportant))
+                    (when defining-kbd-macro
+                      (format-mode-line mode-line-defining-kbd-macro
+                                        'mood-line-major-mode))
+					(format-mode-line mode-line-misc-info 'mood-line-unimportant))))
+    (concat " " (string-trim misc-info) "  ")))
 
 
 (defun mood-line-segment-input-indicator ()
@@ -865,7 +872,8 @@ Unlike the original, it also adds keyboard macro recording status. "
                        (:eval (mood-line-segment-buffer-name))
                        (:eval (mood-line-segment-anzu))
                        (:eval (mood-line-segment-multiple-cursors))
-                       (:eval (mood-line-segment-position))))
+                       (:eval (mood-line-segment-position))
+					   (:eval (mood-line-segment-misc-info))))
 
                     ;; Right
                     (format-mode-line
@@ -873,12 +881,11 @@ Unlike the original, it also adds keyboard macro recording status. "
                        (:eval (mood-line-segment-eol))
                        (:eval (mood-line-segment-encoding))
 					   (:eval (mood-line-segment-input-indicator))
+					   (:eval (mood-line-segment-checker))
+                       (:eval (mood-line-segment-process))
                        (:eval (mood-line-segment-vc))
                        (:eval (mood-line-segment-major-mode))
-					   (:eval (mood-line-segment-misc-info))
-                       (:eval (mood-line-segment-checker))
-                       (:eval (mood-line-segment-process))
-                       " ")))))))
+                       "")))))))
 
 ;; ---------------------------------- ;;
 ;; Deactivation function
