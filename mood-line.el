@@ -187,6 +187,12 @@
   :group 'mood-line
   :type 'boolean)
 
+(defcustom mood-line-buffer-name-max-length 25
+  "Truncate the buffer-id when it's larger than this many characters.
+Set to nil to disable buffer-name truncation."
+  :group 'mood-line
+  :type 'number)
+
 (defcustom mood-line-show-eol-style nil
   "When non-nil, show the EOL style of the current buffer."
   :group 'mood-line
@@ -701,8 +707,22 @@ Checkers checked, in order: `flycheck', `flymake'."
 
 (defun mood-line-segment-buffer-name ()
   "Display the name of the current buffer."
-  (propertize "%b "
-			  'face 'mood-line-buffer-name))
+  (let* ((bn (buffer-name))
+		 (bn-sans (file-name-sans-extension bn))
+		 (ext (file-name-extension bn))
+		 (full-ext (and ext
+						(concat "." ext))))
+	(cond
+	 ((and mood-line-buffer-name-max-length
+		   (> (length bn) mood-line-buffer-name-max-length))
+	  (propertize (concat
+				   (string-limit bn-sans 8)
+				   "..."
+				   (string-limit bn-sans 8 -1)
+				   full-ext
+				   " ")
+				  'face 'mood-line-buffer-name))
+	 (t (propertize (concat bn " ") 'face 'mood-line-buffer-name)))))
 
 ;; ---------------------------------- ;;
 ;; Cursor position segment
