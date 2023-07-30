@@ -67,6 +67,13 @@
 
 (defvar flycheck-current-errors)
 
+(defvar markmacro-overlays)
+
+(defvar emms-playing-time-mode)
+(defvar emms-playing-time-string)
+(defvar emms-lyrics-display-on-modeline)
+(defvar emms-lyrics-mode-line-string)
+
 ;; ---------------------------------- ;;
 ;; External function decls
 ;; ---------------------------------- ;;
@@ -816,7 +823,11 @@ Unlike the original, it also adds keyboard macro recording status. "
                     (when defining-kbd-macro
                       (format-mode-line mode-line-defining-kbd-macro
                                         'mood-line-major-mode))
-					(format-mode-line mode-line-misc-info 'mood-line-unimportant))))
+					(format-mode-line mode-line-misc-info 'mood-line-unimportant)
+                    (when emms-playing-time-mode
+                      (format-mode-line emms-playing-time-string 'mood-line-unimportant))
+                    (when emms-lyrics-display-on-modeline
+                      (format-mode-line emms-lyrics-mode-line-string 'mood-line-unimportant)))))
     (concat " " (string-trim misc-info) "  ")))
 
 
