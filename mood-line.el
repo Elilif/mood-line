@@ -82,6 +82,8 @@
 
 (declare-function flycheck-count-errors "flycheck" (errors))
 
+(declare-function rime-lighter "rime")
+
 (declare-function flymake-running-backends "flymake" ())
 (declare-function flymake-reporting-backends "flymake" ())
 
@@ -824,9 +826,9 @@ Unlike the original, it also adds keyboard macro recording status. "
                       (format-mode-line mode-line-defining-kbd-macro
                                         'mood-line-major-mode))
 					(format-mode-line mode-line-misc-info 'mood-line-unimportant)
-                    (when emms-playing-time-mode
+                    (when (and (boundp 'emms-playing-time-mode) emms-playing-time-mode)
                       (format-mode-line emms-playing-time-string 'mood-line-unimportant))
-                    (when emms-lyrics-display-on-modeline
+                    (when (and (boundp 'emms-lyrics-display-on-modeline) emms-lyrics-display-on-modeline)
                       (format-mode-line emms-lyrics-mode-line-string 'mood-line-unimportant)))))
     (concat " " (string-trim misc-info) "  ")))
 
