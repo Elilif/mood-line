@@ -826,9 +826,13 @@ Unlike the original, it also adds keyboard macro recording status. "
                       (format-mode-line mode-line-defining-kbd-macro
                                         'mood-line-major-mode))
                     (format-mode-line mode-line-misc-info 'mood-line-unimportant)
-                    (when (and (boundp 'emms-playing-time-mode) emms-playing-time-mode)
+                    (when (and (boundp 'emms-playing-time-mode)
+                               emms-playing-time-mode
+                               emms-playing-time-string)
                       (format-mode-line emms-playing-time-string 'mood-line-unimportant))
-                    (when (and (boundp 'emms-lyrics-display-on-modeline) emms-lyrics-display-on-modeline)
+                    (when (and (boundp 'emms-lyrics-display-on-modeline)
+                               emms-lyrics-display-on-modeline
+                               emms-lyrics-mode-line-string)
                       (format-mode-line emms-lyrics-mode-line-string 'mood-line-unimportant)))))
     (concat " " (string-trim misc-info) "  ")))
 
