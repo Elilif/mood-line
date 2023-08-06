@@ -463,7 +463,7 @@ Modal modes checked, in order: `evil-mode', `meow-mode', `god-mode'."
             (cond
              ((memq state '(edited added))
               (format #("%s %s  "
-						0 5 (face mood-line-status-neutral))
+                        0 5 (face mood-line-status-neutral))
                       (mood-line--get-glyph :vc-added)
                       branch))
              ((eq state 'needs-merge)
@@ -717,21 +717,21 @@ Checkers checked, in order: `flycheck', `flymake'."
 (defun mood-line-segment-buffer-name ()
   "Display the name of the current buffer."
   (let* ((bn (buffer-name))
-		 (bn-sans (file-name-sans-extension bn))
-		 (ext (file-name-extension bn))
-		 (full-ext (and ext
-						(concat "." ext))))
-	(cond
-	 ((and mood-line-buffer-name-max-length
-		   (> (length bn) mood-line-buffer-name-max-length))
-	  (propertize (concat
-				   (string-limit bn-sans 8)
-				   "..."
-				   (string-limit bn-sans 8 -1)
-				   full-ext
-				   " ")
-				  'face 'mood-line-buffer-name))
-	 (t (propertize (concat bn " ") 'face 'mood-line-buffer-name)))))
+         (bn-sans (file-name-sans-extension bn))
+         (ext (file-name-extension bn))
+         (full-ext (and ext
+                        (concat "." ext))))
+    (cond
+     ((and mood-line-buffer-name-max-length
+           (> (length bn) mood-line-buffer-name-max-length))
+      (propertize (concat
+                   (string-limit bn-sans 8)
+                   "..."
+                   (string-limit bn-sans 8 -1)
+                   full-ext
+                   " ")
+                  'face 'mood-line-buffer-name))
+     (t (propertize (concat bn " ") 'face 'mood-line-buffer-name)))))
 
 ;; ---------------------------------- ;;
 ;; Cursor position segment
@@ -758,8 +758,8 @@ with region size if applicable."
                                    'face 'mood-line-unimportant)))
         (position (propertize " %p%% " 'face 'mood-line-unimportant)))
     (if (eq major-mode 'pdf-view-mode)
-		mode-line-position
-	  (list "%l:%c" position region-size))))
+        mode-line-position
+      (list "%l:%c" position region-size))))
 
 ;; ---------------------------------- ;;
 ;; EOL segment
@@ -818,14 +818,14 @@ with region size if applicable."
   "Displays the current value of `mode-line-misc-info' in the mode-line.
 Unlike the original, it also adds keyboard macro recording status. "
   (let ((misc-info (concat
-					(when (and (featurep 'markmacro)
-							   markmacro-overlays)
-					  (format-mode-line (format "ov:%s" (length markmacro-overlays))
-										'mood-line-unimportant))
+                    (when (and (featurep 'markmacro)
+                               markmacro-overlays)
+                      (format-mode-line (format "ov:%s" (length markmacro-overlays))
+                                        'mood-line-unimportant))
                     (when defining-kbd-macro
                       (format-mode-line mode-line-defining-kbd-macro
                                         'mood-line-major-mode))
-					(format-mode-line mode-line-misc-info 'mood-line-unimportant)
+                    (format-mode-line mode-line-misc-info 'mood-line-unimportant)
                     (when (and (boundp 'emms-playing-time-mode) emms-playing-time-mode)
                       (format-mode-line emms-playing-time-string 'mood-line-unimportant))
                     (when (and (boundp 'emms-lyrics-display-on-modeline) emms-lyrics-display-on-modeline)
@@ -835,7 +835,7 @@ Unlike the original, it also adds keyboard macro recording status. "
 
 (defun mood-line-segment-input-indicator ()
   (when (featurep 'rime)
-	(concat (rime-lighter) " ")))
+    (concat (rime-lighter) " ")))
 
 ;; ---------------------------------- ;;
 ;; Process segment
@@ -906,15 +906,15 @@ Unlike the original, it also adds keyboard macro recording status. "
                        (:eval (mood-line-segment-anzu))
                        (:eval (mood-line-segment-multiple-cursors))
                        (:eval (mood-line-segment-position))
-					   (:eval (mood-line-segment-misc-info))))
+                       (:eval (mood-line-segment-misc-info))))
 
                     ;; Right
                     (format-mode-line
                      '((:eval (mood-line-segment-indentation))
                        (:eval (mood-line-segment-eol))
                        (:eval (mood-line-segment-encoding))
-					   (:eval (mood-line-segment-input-indicator))
-					   (:eval (mood-line-segment-checker))
+                       (:eval (mood-line-segment-input-indicator))
+                       (:eval (mood-line-segment-checker))
                        (:eval (mood-line-segment-process))
                        (:eval (mood-line-segment-vc))
                        (:eval (mood-line-segment-major-mode))
